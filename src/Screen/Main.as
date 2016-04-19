@@ -1,8 +1,24 @@
 package Screen
 {
+	import com.lpesign.ToastExtension;
+	
 	import flash.display.Bitmap;
 	import flash.system.System;
 	import flash.utils.Dictionary;
+	
+	import Component.ButtonObject;
+	import Component.Dropdownbar;
+	import Component.MessageBox;
+	import Component.RadioButton;
+	import Component.RadioButtonManager;
+	
+	import Data.Resource;
+	import Data.ResourceLoader;
+	import Data.SpriteLoader;
+	import Data.SpriteSheet;
+	
+	import Util.CustomizeEvent;
+	import Util.RadioKeyValue;
 	
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -10,17 +26,6 @@ package Screen
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
-	import Component.ButtonObject;
-	import Component.Dropdownbar;
-	import Component.RadioButton;
-	import Component.RadioButtonManager;
-	import Data.Resource;
-	import Data.ResourceLoader;
-	import Data.SpriteLoader;
-	import Data.SpriteSheet;
-	import Component.MessageBox;
-	import Util.CustomizeEvent;
-	import Util.RadioKeyValue;
 
 	public class Main extends Sprite
 	{
@@ -40,6 +45,8 @@ package Screen
 		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
 		
+		private var t:ToastExtension;
+		
 		/**
 		 *Main클래스는 시작할 때 리소스를 로드합니다. 
 		 * 
@@ -50,6 +57,9 @@ package Screen
 			_resourceLoader.loadResource(Resource.resources);
 			var messageBox:MessageBox = new MessageBox();
 			messageBox.showMessageBox("Resource Loading", 60, this);
+			messageBox.x = 350;
+			messageBox.y = 270;
+			t = new ToastExtension();
 		}
 		
 		/**
@@ -153,6 +163,7 @@ package Screen
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
+			t.toast("우아아앙");
 		}
 		
 		/**

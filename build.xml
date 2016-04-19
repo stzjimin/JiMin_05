@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build ANE" default="all">
+     
+    <target name="all" >
+        <property name="SDK_PATH" value="C:\Program Files\Adobe\Adobe Flash Builder 4.7 (64 Bit)\eclipse\plugins\com.adobe.flash.compiler_4.7.0.349722\AIRSDK"></property>
+        <property name="ADT" value="${SDK_PATH}/lib/adt.jar"></property>
+         
+        <unzip src="bin-debug/Assignment_05.swc" dest="bin"></unzip>     
+ 
+        <java jar="${ADT}" dir="bin" fork="true" output="build.log">
+            <arg value="-package"></arg>
+            <arg value="-target"></arg>
+            <arg value="ane"></arg>
+            <arg value="ToastExtension.ane"></arg>
+            <arg value="extension.xml"></arg>
+            <arg line="-swc ToastExtension.swc"/>
+            <arg line="-platform Android-ARM library.swf ToastExtension.jar"/>
+        </java>       
+    </target> 
+</project>

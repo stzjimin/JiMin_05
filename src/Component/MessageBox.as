@@ -11,6 +11,8 @@ package Component
 		private var _messageText:TextField;
 		private var _frameCounter:int;
 		private var _frameLate:int;
+		private var _x:int;
+		private var _y:int;
 		
 		/**
 		 *사용자에게 특정 메세지를 전달해주고싶을 때 사용하게될 메세지박스 클래스입니다.
@@ -27,7 +29,7 @@ package Component
 			_messageText.format.font = "Arial";
 			_messageText.format.size = 20;
 		}
-		
+
 		public function showMessageBox(text:String, frameCount:int, parent:DisplayObjectContainer, color:uint = Color.AQUA):void
 		{
 			_messageText.format.color = color;
