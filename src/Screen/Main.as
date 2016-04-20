@@ -2,8 +2,12 @@ package Screen
 {
 	import com.lpesign.ToastExtension;
 	
+	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
+	import flash.display.Screen;
+	import flash.events.KeyboardEvent;
 	import flash.system.System;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	
 	import Component.ButtonObject;
@@ -20,6 +24,8 @@ package Screen
 	import Util.CustomizeEvent;
 	import Util.RadioKeyValue;
 	
+	import starling.display.DisplayObject;
+	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -27,8 +33,10 @@ package Screen
 	import starling.textures.Texture;
 	import starling.utils.Color;
 
-	public class Main extends Sprite
+	public class Main extends DisplayObjectContainer
 	{
+		private var _content:Sprite;
+		
 		private var _resourceLoader:ResourceLoader;
 		
 		private var _spriteSheets:Dictionary = new Dictionary();
@@ -45,21 +53,29 @@ package Screen
 		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
 		
-		private var t:ToastExtension;
+		private var toastExtension:ToastExtension;
+		private var dialogExtension:DialogExtension;
 		
 		/**
 		 *Main클래스는 시작할 때 리소스를 로드합니다. 
 		 * 
 		 */		
 		public function Main()
-		{
+		{	
+			_content = new Sprite();
 			_resourceLoader = new ResourceLoader("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources", completeResourceLoad);
+		//	_resourceLoader = new ResourceLoader("GUI_resources", completeResourceLoad);
 			_resourceLoader.loadResource(Resource.resources);
 			var messageBox:MessageBox = new MessageBox();
-			messageBox.showMessageBox("Resource Loading", 60, this);
+			messageBox.showMessageBox("Resource Loading", 60, _content);
 			messageBox.x = 350;
 			messageBox.y = 270;
-			t = new ToastExtension();
+			
+		//	_content.alignPivot();
+			
+			toastExtension = new ToastExtension();
+			dialogExtension = new DialogExtension();
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onClciBackButton);
 		}
 		
 		/**
@@ -67,7 +83,10 @@ package Screen
 		 * 
 		 */		
 		private function completeResourceLoad():void
-		{
+		{	
+			this.width = 600;
+			this.height = 700;
+			
 			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
 			_radioManager.mode = RadioKeyValue.ANIMATION;
 			_radioManager.addEventListener(CustomizeEvent.ModeChange,onChangeMode);
@@ -128,20 +147,43 @@ package Screen
 			_SpriteSheetDrop.y = 590;
 			_SpriteSheetDrop.addEventListener(CustomizeEvent.ListChange, onChangeSprite);
 			
-			addChild(_display);
-			addChild(_loadeButton);
-			addChild(_animationButton);
-			addChild(_imageButton);
-			addChild(_animaionText);
-			addChild(_imageText);
-			addChild(_animationMode);
-			addChild(_imageMode);
-			addChild(_SpriteSheetDrop);
+			trace(stage.width);
+			addChild(_content);
+			_content.addChild(_display);
+			_content.addChild(_loadeButton);
+			_content.addChild(_animationButton);
+			_content.addChild(_imageButton);
+			_content.addChild(_animaionText);
+			_content.addChild(_imageText);
+			_content.addChild(_animationMode);
+			_content.addChild(_imageMode);
+			_content.addChild(_SpriteSheetDrop);
 			
 			Resource.resources = null;		//리소스를 사용이 끝나고나면 메모리를 풀어줌
 			System.gc();
+			trace(this.x);
+			trace(this.y);
+			trace(flash.display.Screen.mainScreen.bounds);
+			trace(stage.bounds);
 			
 		//	_animationButton.dispatchEvent(new Event(Event.TRIGGERED));
+			this.alignPivot();
+			
+			this.x = flash.display.Screen.mainScreen.bounds.width / 2;
+			this.y = flash.display.Screen.mainScreen.bounds.height / 2;
+			
+			this.width = flash.display.Screen.mainScreen.bounds.width /11 * 10 //- (flash.display.Screen.mainScreen.bounds.width / 14);
+			this.height = flash.display.Screen.mainScreen.bounds.height /11 * 10 //- (flash.display.Screen.mainScreen.bounds.height / 14);
+		}
+		
+		private function onClciBackButton(event:KeyboardEvent):void
+		{
+			if(event.keyCode == Keyboard.BACK)
+			{
+				event.preventDefault();
+				dialogExtension.showAlertDialog("종료?");
+				trace("aa");
+			}
 		}
 		
 		/**
@@ -163,7 +205,8 @@ package Screen
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
-			t.toast("우아아앙");
+			toastExtension.toast("삭제");
+			dialogExtension.showGallery("기똥차게 넘어감");
 		}
 		
 		/**

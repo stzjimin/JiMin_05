@@ -4,6 +4,7 @@ package Data
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.filesystem.File;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
@@ -70,6 +71,39 @@ package Data
 			}
 		}
 		
+		/*
+		public function ResourceLoader(libName:String, completeFunc:Function)
+		{
+			_completeFunc = completeFunc;
+			_libName = libName;
+		}
+		
+		public function loadResource(resources:Dictionary):void
+		{
+			_resources = resources;
+			pushDict(File.applicationDirectory.resolvePath(_libName));
+		}
+		
+		private function pushDict(...rawAssets):void
+		{
+			if(!rawAssets["isDirectory"])
+				_assetLength = _assetLength + rawAssets.length - 1;
+			for each(var rawAsset:Object in rawAssets)
+			{
+				if(rawAsset["isDirectory"])
+					pushDict.apply(this, rawAsset["getDirectoryListing"]());
+				else if(getQualifiedClassName(rawAsset) == "flash.filesystem::File")
+				{
+					var urlRequest:URLRequest = new URLRequest(decodeURI(rawAsset["url"]));
+					var loader:Loader = new Loader();
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteLoad);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+					loader.load(urlRequest);
+				}
+			}
+		}
+		*/
+		
 		/**
 		 *이미지파일의 URL주소로 해당 이미지파일의 이름을 구하는 함수 
 		 * @param rawAssetURL
@@ -105,7 +139,7 @@ package Data
 		 */		
 		private function onCompleteLoad(event:Event):void
 		{
-			trace(event.currentTarget.loader.content.name);
+			trace(Bitmap(event.currentTarget.loader.content).name);
 			_resources[getName(event.currentTarget.url)] = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteLoad);
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);

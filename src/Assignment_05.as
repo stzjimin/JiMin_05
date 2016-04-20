@@ -8,7 +8,7 @@ package
 	
 	import starling.core.Starling;
 	
-	[SWF(width="1980", height="1024", frameRate="60", backgroundColor="#FFFFF0")]
+	[SWF(width="600", height="700", frameRate="60", backgroundColor="#FFFFF0")]
 	public class Assignment_05 extends Sprite
 	{
 		private var _starling:Starling;
@@ -18,8 +18,11 @@ package
 			super();
 			
 			// support autoOrients
-			stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.TOP;
+//			stage.align = StageAlign.RIGHT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+//			stage.scaleMode = StageScaleMode.NO_BORDER;
+//			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
 			_starling = new Starling(Main, stage);
 			_starling.start();

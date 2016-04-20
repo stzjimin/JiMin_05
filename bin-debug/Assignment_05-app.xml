@@ -313,7 +313,9 @@
 
 
 
+
 <extensions>
         <extensionID>com.lpesign.ToastExtension</extensionID>
+    <extensionID>com.dialog.DialogExtension</extensionID>
     </extensions>
 </application>
