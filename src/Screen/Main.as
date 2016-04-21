@@ -4,11 +4,13 @@ package Screen
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Screen;
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
 	import flash.system.System;
 	import flash.ui.Keyboard;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import Component.ButtonObject;
@@ -55,10 +57,12 @@ package Screen
 		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
 		
-		private var toastExtension:ToastExtension;
-		private var dialogExtension:DialogExtension;
+		private var _toastExtension:ToastExtension;
+		private var _dialogExtension:DialogExtension;
 		
 		private var _eventDispatcher:IEventDispatcher;
+		
+		private var _imagePickerExtension:ImagePickerExtension;
 		
 		/**
 		 *Main클래스는 시작할 때 리소스를 로드합니다. 
@@ -77,9 +81,10 @@ package Screen
 			
 		//	_content.alignPivot();
 			
-			toastExtension = new ToastExtension();
-			dialogExtension = new DialogExtension(_eventDispatcher);
+			_toastExtension = new ToastExtension();
+			_dialogExtension = new DialogExtension(_eventDispatcher);
 		//	_eventDispatcher.addEventListener("customEvent", onSelectDialog);
+			_imagePickerExtension = new ImagePickerExtension();
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onClciBackButton);
 		}
 		
@@ -192,7 +197,7 @@ package Screen
 			if(event.keyCode == Keyboard.BACK)
 			{
 				event.preventDefault();
-				dialogExtension.showAlertDialog("종료?");
+				_dialogExtension.showAlertDialog("종료?");
 				trace("aa");
 			}
 		}
@@ -216,7 +221,14 @@ package Screen
 			_display.stopAnimation();
 			_display.spriteSheet = null;
 		//	toastExtension.toast("삭제");
-			dialogExtension.showGallery("기똥차게 넘어감");
+		//	_dialogExtension.showGallery("기똥차게 넘어감");
+			_imagePickerExtension.displayImagePicker(onImagePicked);
+		}
+		
+		private function onImagePicked(event:String, pickedImageBitmapData:BitmapData, pickedImageByteArray:ByteArray):void
+		{
+			trace("드러왔당!!");
+			trace(pickedImageBitmapData.width);
 		}
 		
 		private function onClickDispaly(event:TouchEvent):void
