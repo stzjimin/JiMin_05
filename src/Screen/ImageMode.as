@@ -42,6 +42,8 @@ package Screen
 		private var _eventDispatcher:IEventDispatcher;
 		private var _dialogExtension:DialogExtension;
 		
+		private var _saveFilePath:String = "SpritePackerApp/";
+		
 		/**
 		 *이미지모드와 관련된 일들을 담당하는 클래스입니다.
 		 * 이미지모드는 1개의 드롭다운바와 3개의 버튼으로 구성됩니다.
@@ -186,9 +188,18 @@ package Screen
 		{
 			if(_spriteSheet != null)
 			{
+				_dialogExtension.showInputDialog("파일이름을 정해주세요!", getFileName);
+				/*
 				var fileManager:FileIOManager = new FileIOManager();
 				fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
+				*/
 			}
+		}
+		
+		private function getFileName(fileName:String):void
+		{
+			_saveFilePath += fileName;
+			onCompleteSaveSheet(_saveFilePath);
 		}
 		
 		/**
@@ -199,6 +210,7 @@ package Screen
 		 */		
 		private function onCompleteSaveSheet(filePath:String):void
 		{
+			trace(filePath);
 			var packedData:PackedData = new PackedData(1024, 1024);
 			packedData.bitmapData = _spriteSheet.spriteBitmap.bitmapData;
 			packedData.packedImageQueue = _spriteSheet.images;
