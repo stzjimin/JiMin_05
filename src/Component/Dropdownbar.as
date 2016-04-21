@@ -1,5 +1,11 @@
 package Component
 {	
+	import com.lpesign.ToastExtension;
+	
+	import flash.events.IEventDispatcher;
+	
+	import Util.CustomizeEvent;
+	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -9,7 +15,6 @@ package Component
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
-	import Util.CustomizeEvent;
 
 	public class Dropdownbar extends DisplayObjectContainer
 	{
@@ -29,6 +34,9 @@ package Component
 		private var _upButton:ButtonObject;
 		private var _downButton:ButtonObject;
 		private var _content:Sprite;
+		private var _eventDispatcher:IEventDispatcher;
+		private var dialogExtension:DialogExtension;
+		private var toastExtension:ToastExtension;
 		
 		/**
 		 *드롭다운바에 대한 클래스입니다.
@@ -43,6 +51,8 @@ package Component
 		 */		
 		public function Dropdownbar(width:int, dropTexture:Texture, upTexture:Texture, downTexture:Texture)
 		{
+			dialogExtension = new DialogExtension(_eventDispatcher, onClickList);
+			toastExtension = new ToastExtension();
 			_selectedIndex = 0;
 			_list = new Vector.<TextField>();
 			
@@ -88,6 +98,7 @@ package Component
 			addChild(_dropButton);
 			addChild(_content);
 		}
+		
 		
 		public function get currentSelectList():TextField
 		{
@@ -182,7 +193,16 @@ package Component
 		 */		
 		private function onClickDropdownbar(event:Event):void
 		{
-			togleVisible();
+		//	togleVisible();
+		//	trace("ddd");
+			var array:Array = new Array();
+			
+			for(var i:int = 0; i < _list.length; i++)
+			{
+				array[i] = _list[i].text;
+			}
+			dialogExtension.showListDialog(array);
+			toastExtension.toast("찌발");
 		}
 		
 		/**
@@ -234,21 +254,12 @@ package Component
 		 * @param event
 		 * 
 		 */		
-		private function onClickList(event:TouchEvent):void
+		private function onClickList(name:String):void
 		{
-			if(event.getTouch(TextField(event.currentTarget), TouchPhase.BEGAN) != null)
-			{
-				TextField(event.currentTarget).scale = 0.9;
-			}
-			
-			if(event.getTouch(TextField(event.currentTarget), TouchPhase.ENDED) != null)
-			{
-				TextField(event.currentTarget).scale = 1.0;
-				_selectedIndex = _list.indexOf(TextField(event.currentTarget));
-				togleVisible();
-				_currentSelectList.text = TextField(event.currentTarget).text;
-				dispatchEvent(new Event(CustomizeEvent.ListChange));
-			}
+		//	_selectedIndex = _list.indexOf(n);
+		//	togleVisible();
+			_currentSelectList.text = name;
+			dispatchEvent(new Event(CustomizeEvent.ListChange));
 		}
 	}
 }

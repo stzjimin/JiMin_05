@@ -5,6 +5,8 @@ package Screen
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.Screen;
+	import flash.events.IEventDispatcher;
+	import flash.events.InvokeEvent;
 	import flash.events.KeyboardEvent;
 	import flash.system.System;
 	import flash.ui.Keyboard;
@@ -29,6 +31,7 @@ package Screen
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.EventDispatcher;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
@@ -56,6 +59,8 @@ package Screen
 		private var toastExtension:ToastExtension;
 		private var dialogExtension:DialogExtension;
 		
+		private var _eventDispatcher:IEventDispatcher;
+		
 		/**
 		 *Main클래스는 시작할 때 리소스를 로드합니다. 
 		 * 
@@ -74,7 +79,8 @@ package Screen
 		//	_content.alignPivot();
 			
 			toastExtension = new ToastExtension();
-			dialogExtension = new DialogExtension();
+			dialogExtension = new DialogExtension(_eventDispatcher);
+		//	_eventDispatcher.addEventListener("customEvent", onSelectDialog);
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onClciBackButton);
 		}
 		
@@ -174,6 +180,11 @@ package Screen
 			
 			this.width = flash.display.Screen.mainScreen.bounds.width /11 * 10 //- (flash.display.Screen.mainScreen.bounds.width / 14);
 			this.height = flash.display.Screen.mainScreen.bounds.height /11 * 10 //- (flash.display.Screen.mainScreen.bounds.height / 14);
+		}
+		
+		private function onSelectDialog(event:Event):void
+		{
+			trace("bbbbbb");
 		}
 		
 		private function onClciBackButton(event:KeyboardEvent):void
