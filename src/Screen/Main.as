@@ -6,7 +6,6 @@ package Screen
 	import flash.display.Bitmap;
 	import flash.display.Screen;
 	import flash.events.IEventDispatcher;
-	import flash.events.InvokeEvent;
 	import flash.events.KeyboardEvent;
 	import flash.system.System;
 	import flash.ui.Keyboard;
@@ -26,12 +25,12 @@ package Screen
 	import Util.CustomizeEvent;
 	import Util.RadioKeyValue;
 	
-	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.EventDispatcher;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
@@ -147,6 +146,7 @@ package Screen
 			_display = new Display(650, 500);
 			_display.x = 25;
 			_display.y = 25;
+			_display.addEventListener(TouchEvent.TOUCH, onClickDispaly);
 			
 			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
@@ -212,12 +212,27 @@ package Screen
 			_spriteSheets[_SpriteSheetDrop.currentSelectList.text] = null;
 			_SpriteSheetDrop.deleteList(_SpriteSheetDrop.currentSelectList.text);
 			_SpriteSheetDrop.currentSelectList.text = "";
-			_SpriteSheetDrop.refreshList();
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
 		//	toastExtension.toast("삭제");
 			dialogExtension.showGallery("기똥차게 넘어감");
+		}
+		
+		private function onClickDispaly(event:TouchEvent):void
+		{
+			if(_display.mode == RadioKeyValue.IMAGE)
+			{
+				if(event.getTouch(_display, TouchPhase.BEGAN) != null)
+				{
+					_display.expansionImage();
+				}
+				
+				if(event.getTouch(_display, TouchPhase.ENDED) != null)
+				{
+					_display.reduceImage();
+				}
+			}
 		}
 		
 		/**

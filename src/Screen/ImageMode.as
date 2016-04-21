@@ -95,7 +95,6 @@ package Screen
 				for(var i:int = 0; i < _spriteSheet.images.length; i++)
 					_imageSelectBar.createList(_spriteSheet.images[i].name);
 			}
-			_imageSelectBar.refreshList();
 		}
 		
 		/**
