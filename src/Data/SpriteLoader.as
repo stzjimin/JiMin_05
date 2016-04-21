@@ -6,7 +6,6 @@ package Data
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
-	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 
