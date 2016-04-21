@@ -3,7 +3,9 @@ package Data
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.filesystem.File;
 	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -20,13 +22,21 @@ package Data
 		private var _failFunc:Function;
 		private var _fileManager:FileIOManager;
 		
+		private var _eventDispatcher:IEventDispatcher;
+		private var _dialogExtension:DialogExtension;
+		
 		public function SpriteLoader(completeFunc:Function, failFunc:Function)
 		{
+			_dialogExtension = new DialogExtension(_eventDispatcher);
 			_completeFunc = completeFunc;
 			_failFunc = failFunc;
-			_fileManager = new FileIOManager();
-			var pngFileFilter:FileFilter = new FileFilter("png","*.png");
-			_fileManager.selectFile("스프라이트시트 오픈", pngFileFilter, onInputPNG);
+			_dialogExtension.showGallery(onImagePicked);
+		}
+		
+		private function onImagePicked(data:String):void
+		{
+			var file:File = new File(data);
+			onInputPNG(file.url, file.name);
 		}
 
 		/**

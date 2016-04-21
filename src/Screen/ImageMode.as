@@ -3,6 +3,7 @@ package Screen
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.PNGEncoderOptions;
+	import flash.events.IEventDispatcher;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -11,11 +12,9 @@ package Screen
 	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
 	
-	import starling.display.Sprite;
-	import starling.events.Event;
-	import starling.textures.Texture;
 	import Component.ButtonObject;
 	import Component.Dropdownbar;
+	
 	import Data.Encoder;
 	import Data.FileIOManager;
 	import Data.ImageInfo;
@@ -24,7 +23,12 @@ package Screen
 	import Data.Packer;
 	import Data.Resource;
 	import Data.SpriteSheet;
+	
 	import Util.CustomizeEvent;
+	
+	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.textures.Texture;
 
 	public class ImageMode extends Sprite
 	{	
@@ -34,6 +38,9 @@ package Screen
 		private var _currentSaveButton:ButtonObject;
 		
 		private var _spriteSheet:SpriteSheet;
+		
+		private var _eventDispatcher:IEventDispatcher;
+		private var _dialogExtension:DialogExtension;
 		
 		/**
 		 *이미지모드와 관련된 일들을 담당하는 클래스입니다.
@@ -118,24 +125,16 @@ package Screen
 		{
 			if(_spriteSheet != null)
 			{
-				var fileManager:FileIOManager = new FileIOManager();
-				var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
-				fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
+				_dialogExtension = new DialogExtension(_eventDispatcher);
+				_dialogExtension.showGallery(onImagePicked);
 			}
 		}
 		
-		/**
-		 *이미지파일선택이 완료되면 호출되는 함수입니다.
-		 * ImageLoader를 이용하여 해당파일을 로드해줍니다.
-		 * 로드가 완료되면 onCompleteLoad함수를 호출해줍니다.
-		 * @param filePath
-		 * @param fileName
-		 * 
-		 */		
-		private function onLoadedImage(filePath:String, fileName:String):void
+		private function onImagePicked(data:String):void
 		{
+			var file:File = new File(data);
 			var imageLoader:ImageLoader = new ImageLoader(completeLoad, uncompleteLoad);
-			imageLoader.startImageLoad(filePath, fileName);
+			imageLoader.startImageLoad(file.url, file.name);
 		}
 		
 		/**

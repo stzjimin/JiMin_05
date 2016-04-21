@@ -3,7 +3,9 @@ package Data
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.filesystem.File;
 	import flash.net.URLRequest;
 
 	public class ImageLoader

@@ -303,6 +303,9 @@
 					<activity
 	    				android:name="com.freshplanet.ane.AirImagePicker.AirImagePickerActivity"
 	   					android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|fontScale"/>
+	   				<activity
+	    				android:name="com.dialog.ImagePickerActivity"
+	   					android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|fontScale"/>
 				</application>
 			</manifest>
 			

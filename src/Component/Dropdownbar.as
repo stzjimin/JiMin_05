@@ -125,7 +125,6 @@ package Component
 			var array:Array = _list;
 			
 			dialogExtension.showListDialog(array, onClickList);
-			toastExtension.toast("찌발");
 		}
 		
 

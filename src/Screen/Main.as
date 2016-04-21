@@ -221,15 +221,16 @@ package Screen
 			_display.stopAnimation();
 			_display.spriteSheet = null;
 		//	toastExtension.toast("삭제");
-		//	_dialogExtension.showGallery("기똥차게 넘어감");
-			_imagePickerExtension.displayImagePicker(onImagePicked);
+		//	_imagePickerExtension.displayImagePicker(onImagePicked);
 		}
 		
+		/*
 		private function onImagePicked(event:String, pickedImageBitmapData:BitmapData, pickedImageByteArray:ByteArray):void
 		{
 			trace("드러왔당!!");
 			trace(pickedImageBitmapData.width);
 		}
+		*/
 		
 		private function onClickDispaly(event:TouchEvent):void
 		{
