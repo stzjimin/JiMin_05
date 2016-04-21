@@ -205,7 +205,7 @@ package Screen
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
-			toastExtension.toast("삭제");
+		//	toastExtension.toast("삭제");
 			dialogExtension.showGallery("기똥차게 넘어감");
 		}
 		
