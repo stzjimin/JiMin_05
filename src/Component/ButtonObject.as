@@ -140,6 +140,8 @@ package Component
 				state = ButtonState.UP;
 				if (!touch.cancelled) dispatchEventWith(Event.TRIGGERED, true);
 			}
+			
+			touch = null;
 		}
 	}
 }

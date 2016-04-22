@@ -48,21 +48,22 @@ package Data
 			_name = fileName;
 			_spritePath = filePath;
 			var urlRequest:URLRequest = new URLRequest(_spritePath);
-			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompletePngLoad);
-			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
-			loader.load(urlRequest);
+			var pngLoader:Loader = new Loader();
+			pngLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompletePngLoad);
+			pngLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtPngError);
+			pngLoader.load(urlRequest);
 		}
 		
 		/**
-		 *로더의 IO애러시 호출될 함수 
+		 *PNG로더의 IO애러시 호출될 함수 
 		 * @param event
 		 * 
 		 */		
-		private function uncaughtError(event:IOErrorEvent):void
+		private function uncaughtPngError(event:IOErrorEvent):void
 		{
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
-			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtPngError);
+			event.currentTarget.loader.unload();
 			_failFunc("PNG File unLoaded");
 		}
 		
@@ -76,7 +77,8 @@ package Data
 		{
 			_spriteSheet = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
-			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtPngError);
+			event.currentTarget.loader.unload();
 			
 			var urlRequest:URLRequest = new URLRequest(_spritePath.replace("png","xml"));
 			var xmlLoader:URLLoader = new URLLoader();
@@ -86,14 +88,15 @@ package Data
 		}
 		
 		/**
-		 *로더의 IO애러시 호출될 함수 
+		 *XML로더의 IO애러시 호출될 함수 
 		 * @param event
 		 * 
 		 */		
 		private function uncaughtXmlError(event:IOErrorEvent):void
 		{
-			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
-			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteXmlLoad);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtXmlError);
+			event.currentTarget.close();
 			_failFunc("XML File unLoaded");
 		}
 		
@@ -107,6 +110,8 @@ package Data
 		{
 			_xml = new XML(event.currentTarget.data);
 			event.currentTarget.removeEventListener("complete", onCompleteXmlLoad);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtXmlError);
+			event.currentTarget.close();
 			_completeFunc(_name, _spriteSheet, _xml);
 		}
 	}

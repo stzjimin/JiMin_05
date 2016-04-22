@@ -43,7 +43,7 @@ package Screen
 			_deleteButton.y = 27;
 			_deleteButton.addEventListener(Event.TRIGGERED, onClickDeleteButton);
 			
-			_animationSpeed = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
+			_animationSpeed = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap));
 			_animationSpeed.x = 10;
 			_animationSpeed.y = 0;
 			_animationSpeed.addEventListener(CustomizeEvent.ListChange, onChangeSpeed);

@@ -1,14 +1,11 @@
 package Component
-{	
-	import com.lpesign.ToastExtension;
-	
+{		
 	import flash.events.IEventDispatcher;
 	
 	import Util.CustomizeEvent;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
-	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.Texture;
@@ -23,55 +20,44 @@ package Component
 		private var _currentSelectList:TextField;
 		
 		private var _dropButton:ButtonObject;
-		private var _currentView:int;
 		
 		private var _backGround:Quad;
-		private var _content:Sprite;
 		private var _eventDispatcher:IEventDispatcher;
-		private var dialogExtension:DialogExtension;
-		private var toastExtension:ToastExtension;
+		private var _dialogExtension:DialogExtension;
 		
 		/**
 		 *드롭다운바에 대한 클래스입니다.
-		 * 드롭다운바는 3개의 버튼과 4개의 리스트로 이루어집니다.
-		 * 3개의 버튼은 각각 드롭버튼, 리스트업버튼, 리스트다운버튼 입니다. 
-		 * 각각의 리스트도 버튼처럼 클릭이 가능하며 버튼이 클릭이 되면 _currentViewList에 값이 할당됩니다.
+		 * 안드로이드 환경에서는 드롭다운바의 드롭버튼을 누를경우 리스트다이얼로그에서 선택이되게 합니다.
 		 * @param width
 		 * @param dropTexture
 		 * @param upTexture
 		 * @param downTexture
 		 * 
 		 */		
-		public function Dropdownbar(width:int, dropTexture:Texture, upTexture:Texture, downTexture:Texture)
+		public function Dropdownbar(width:int, dropTexture:Texture)
 		{
-			dialogExtension = new DialogExtension(_eventDispatcher);
-			toastExtension = new ToastExtension();
+			_dialogExtension = new DialogExtension(_eventDispatcher);
 			
 			_list = new Array();
 			
 			_width = width;
 			
 			_dropButton = new ButtonObject(dropTexture);
-			_dropButton.width = 20;
-			_dropButton.height = 20;
-			_dropButton.x = _width - 20;
+			_dropButton.width = 30;
+			_dropButton.height = 25;
+			_dropButton.x = _width - 30;
 			_dropButton.addEventListener(Event.TRIGGERED, onClickDropdownbar);
 			
-			_currentSelectList = new TextField(_width-20, 20, "");
+			_currentSelectList = new TextField(_width-30, 25, "");
 			_currentSelectList.border = true;
 			
-			_backGround = new Quad(width, 80);
+			_backGround = new Quad(width, 25);
 			_backGround.alpha = 0.5;
 			_backGround.color = Color.SILVER;
 			
-			_content = new Sprite();
-			_content.y = 20;
-			_content.visible = false;
-			_content.addChild(_backGround);
-			
+			addChild(_backGround);
 			addChild(_currentSelectList);
 			addChild(_dropButton);
-			addChild(_content);
 		}
 		
 		
@@ -82,7 +68,6 @@ package Component
 		
 		/**
 		 *드롭다운바의 모든 리스트를 제거하는 함수입니다. 
-		 * 리스트를 제거할 때는 모든 리스트의 이벤트리스너를 제거한 후 제거해줍니다.
 		 */		
 		public function initList():void
 		{
@@ -104,7 +89,6 @@ package Component
 		
 		/**
 		 *인자로 받은 문자열에 해당하는 리스트를 제거합니다.
-		 * 이 때 제거되는 리스트의 이벤트리스너도 제거해줍니다. 
 		 * @param name
 		 * 
 		 */		
@@ -116,7 +100,7 @@ package Component
 		
 		/**
 		 *드롭버튼을 눌렀을 때 호출됩니다.
-		 * 드롭버튼을 누를경우 리스트의 비지블이 토글됩니다. 
+		 * 드롭버튼을 누를경우 리스트다이얼로그를 띄워줍니다.
 		 * @param event
 		 * 
 		 */		
@@ -124,7 +108,7 @@ package Component
 		{
 			var array:Array = _list;
 			
-			dialogExtension.showListDialog(array, onClickList);
+			_dialogExtension.showListDialog(array, onClickList);
 		}
 		
 

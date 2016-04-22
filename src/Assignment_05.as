@@ -19,10 +19,7 @@ package
 			
 			// support autoOrients
 			stage.align = StageAlign.TOP;
-//			stage.align = StageAlign.RIGHT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-//			stage.scaleMode = StageScaleMode.NO_BORDER;
-//			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			
 			_starling = new Starling(Main, stage);
 			_starling.start();

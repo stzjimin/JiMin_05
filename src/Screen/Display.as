@@ -8,10 +8,7 @@ package Screen
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.textures.Texture;
 	import starling.utils.Color;
 
 	public class Display extends Sprite
@@ -23,7 +20,6 @@ package Screen
 		
 		private var _mode:String = RadioKeyValue.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
-		private var _spriteTexture:Texture;
 		
 		private var _width:int;
 		private var _height:int;
@@ -59,7 +55,6 @@ package Screen
 			_currentImage.width = 1;
 			_currentImage.height = 1;
 			_currentImage.visible = false;
-		//	_currentImage.addEventListener(TouchEvent.TOUCH, onClickImage);
 			
 			_currentAnimation = new Image(null);
 			_currentAnimation.pivotX = _currentAnimation.width / 2;
@@ -213,43 +208,27 @@ package Screen
 			}
 		}
 		
-		public function expansionImage():void
+		/**
+		 *Display의 _currentImage를 고정크기로 변환해주는 함수입니다.
+		 * 크기가 작은 이미지를 위해 제작되었습니다. 
+		 * 
+		 */
+		public function changeImageStatic():void
 		{
 			_currentImage.width = 300;
 			_currentImage.height = 400;
 		}
 		
-		public function reduceImage():void
+		/**
+		 *Display의 _cureentImage를 상대적크기로 변환해주는 함수입니다.
+		 * 고정크기로 변환되었던 이미지를 다시 원래크기로 돌릴때 사용됩니다. 
+		 * 
+		 */		
+		public function changeImageRelative():void
 		{
 			_currentImage.width = getLocalWidth(_currentImage.texture.width);
 			_currentImage.height = getLocalHeight(_currentImage.texture.height);
 		}
-		
-		/**
-		 *Display가 이미지모드일 때 이미지가 클릭되면 호출되는 함수입니다.
-		 * 이미지가 클릭되있는 동안 이미지는 고정크기로 전환됩니다. 
-		 * @param event
-		 * 
-		 */		
-		/*
-		private function onClickImage(event:TouchEvent):void
-		{
-			if(_mode == RadioKeyValue.IMAGE)
-			{
-				if(event.getTouch(_currentImage, TouchPhase.BEGAN) != null)
-				{
-					_currentImage.width = 300;
-					_currentImage.height = 400;
-				}
-				
-				if(event.getTouch(_currentImage, TouchPhase.ENDED) != null)
-				{
-					_currentImage.width = getLocalWidth(_currentImage.texture.width);
-					_currentImage.height = getLocalHeight(_currentImage.texture.height);
-				}
-			}
-		}
-		*/
 		
 		/**
 		 * Display창에 비례하여 이미지의 알맞은 길이를 계산하는 함수입니다.

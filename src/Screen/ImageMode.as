@@ -9,14 +9,12 @@ package Screen
 	import flash.filesystem.FileStream;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
 	
 	import Component.ButtonObject;
 	import Component.Dropdownbar;
 	
 	import Data.Encoder;
-	import Data.FileIOManager;
 	import Data.ImageInfo;
 	import Data.ImageLoader;
 	import Data.PackedData;
@@ -52,7 +50,7 @@ package Screen
 		{
 			_dialogExtension = new DialogExtension(_eventDispatcher);
 			
-			_imageSelectBar = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
+			_imageSelectBar = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap));
 			_imageSelectBar.y = 10;
 			_imageSelectBar.addEventListener(CustomizeEvent.ListChange, onChangeImage);
 			

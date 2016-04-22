@@ -3,9 +3,7 @@ package Data
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
-	import flash.filesystem.File;
 	import flash.net.URLRequest;
 
 	public class ImageLoader
@@ -52,6 +50,7 @@ package Data
 		{
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteImageLoad);
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.loader.unload();
 			_failFunc("Image unLoaded");
 		}
 		
@@ -65,6 +64,7 @@ package Data
 			var bitmap:Bitmap = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteImageLoad);
+			event.currentTarget.loader.unload();
 			var imageInfo:ImageInfo = new ImageInfo();
 			imageInfo.name = _name.replace(fileReg,"");
 			imageInfo.x = bitmap.x;

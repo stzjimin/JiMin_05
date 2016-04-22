@@ -29,7 +29,7 @@ package Data
 		
 		/**
 		 *프로그램이 시작될 때 프로그램에서 필요한 리소스들을 로드해주는 클래스입니다.
-		 * 리소스가 담겨져있는 폴더의 모든 이미지들을 가져온 후 _reasources에 저장해줍니다.
+		 * 외부저장소에 있는 리소스들을 모두 불러온 후 _reasources에 저장해줍니다.
 		 * @param libName
 		 * @param completeFunc
 		 * 
@@ -39,8 +39,6 @@ package Data
 			_completeFunc = completeFunc;
 			_libName = libName;
 			_resourceURL = new Vector.<String>();
-			_resourceURL.push("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources/arrowDown.png");
-			_resourceURL.push("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources/arrowUp.png");
 			_resourceURL.push("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources/checkRadio.png");
 			_resourceURL.push("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources/delete.png");
 			_resourceURL.push("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources/dropdown.png");
@@ -71,39 +69,6 @@ package Data
 			}
 		}
 		
-		/*
-		public function ResourceLoader(libName:String, completeFunc:Function)
-		{
-			_completeFunc = completeFunc;
-			_libName = libName;
-		}
-		
-		public function loadResource(resources:Dictionary):void
-		{
-			_resources = resources;
-			pushDict(File.applicationDirectory.resolvePath(_libName));
-		}
-		
-		private function pushDict(...rawAssets):void
-		{
-			if(!rawAssets["isDirectory"])
-				_assetLength = _assetLength + rawAssets.length - 1;
-			for each(var rawAsset:Object in rawAssets)
-			{
-				if(rawAsset["isDirectory"])
-					pushDict.apply(this, rawAsset["getDirectoryListing"]());
-				else if(getQualifiedClassName(rawAsset) == "flash.filesystem::File")
-				{
-					var urlRequest:URLRequest = new URLRequest(decodeURI(rawAsset["url"]));
-					var loader:Loader = new Loader();
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteLoad);
-					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
-					loader.load(urlRequest);
-				}
-			}
-		}
-		*/
-		
 		/**
 		 *이미지파일의 URL주소로 해당 이미지파일의 이름을 구하는 함수 
 		 * @param rawAssetURL
@@ -129,7 +94,11 @@ package Data
 			trace("Please Check File!!");
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteLoad);
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.loader.unload();
 			_assetCounter++;
+			trace(_assetCounter + " / " + _assetLength);
+			if(_assetCounter == _assetLength)
+				_completeFunc();
 		}
 		
 		/**
@@ -143,6 +112,7 @@ package Data
 			_resources[getName(event.currentTarget.url)] = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteLoad);
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			event.currentTarget.loader.unload();
 			_assetCounter++;
 			
 			trace(_assetCounter + " / " + _assetLength);

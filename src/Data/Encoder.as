@@ -52,8 +52,6 @@ package Data
 		private function getXmlEncode(packedData:PackedData):void
 		{
 			var localXmlFile:File = File.userDirectory.resolvePath(_filePath + ".xml");
-			trace(localXmlFile.nativePath);
-			trace(localXmlFile.url);
 			var fileAccess:FileStream = new FileStream();
 			
 			var maxWidth:int = 0;
@@ -98,7 +96,6 @@ package Data
 			bitmapData.encode(new Rectangle(0, 0, packedData.width, packedData.height), new PNGEncoderOptions(), byteArray);
 			
 			var localPngFile:File = File.userDirectory.resolvePath(_filePath + ".png");
-			trace(localPngFile.nativePath);
 			var fileAccess:FileStream = new FileStream();
 			fileAccess.open(localPngFile, FileMode.WRITE);
 			fileAccess.writeBytes(byteArray);

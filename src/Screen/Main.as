@@ -4,13 +4,11 @@ package Screen
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Screen;
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
 	import flash.system.System;
 	import flash.ui.Keyboard;
-	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import Component.ButtonObject;
@@ -71,10 +69,9 @@ package Screen
 			_resourceLoader = new ResourceLoader("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources", completeResourceLoad);
 			_resourceLoader.loadResource(Resource.resources);
 			var messageBox:MessageBox = new MessageBox();
-			messageBox.showMessageBox("Resource Loading", 60, _content);
-			messageBox.x = 350;
-			messageBox.y = 270;
-			
+			messageBox.showMessageBox("Resource Loading", 45, this);
+			messageBox.x = flash.display.Screen.mainScreen.bounds.width / 2;
+			messageBox.y = flash.display.Screen.mainScreen.bounds.height / 2;
 			
 			_toastExtension = new ToastExtension();
 			_dialogExtension = new DialogExtension(_eventDispatcher);
@@ -146,12 +143,11 @@ package Screen
 			_display.y = 25;
 			_display.addEventListener(TouchEvent.TOUCH, onClickDispaly);
 			
-			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
+			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
 			_SpriteSheetDrop.addEventListener(CustomizeEvent.ListChange, onChangeSprite);
 			
-			trace(stage.width);
 			addChild(_content);
 			_content.addChild(_display);
 			_content.addChild(_loadeButton);
@@ -165,10 +161,6 @@ package Screen
 			
 			Resource.resources = null;		//리소스를 사용이 끝나고나면 메모리를 풀어줌
 			System.gc();
-			trace(this.x);
-			trace(this.y);
-			trace(flash.display.Screen.mainScreen.bounds);
-			trace(stage.bounds);
 			
 		//	_animationButton.dispatchEvent(new Event(Event.TRIGGERED));
 			this.alignPivot();
@@ -176,13 +168,8 @@ package Screen
 			this.x = flash.display.Screen.mainScreen.bounds.width / 2;
 			this.y = flash.display.Screen.mainScreen.bounds.height / 2;
 			
-			this.width = flash.display.Screen.mainScreen.bounds.width /11 * 10 //- (flash.display.Screen.mainScreen.bounds.width / 14);
-			this.height = flash.display.Screen.mainScreen.bounds.height /11 * 10 //- (flash.display.Screen.mainScreen.bounds.height / 14);
-		}
-		
-		private function onSelectDialog(event:Event):void
-		{
-			trace("bbbbbb");
+			this.width = flash.display.Screen.mainScreen.bounds.width /11 * 10; 
+			this.height = flash.display.Screen.mainScreen.bounds.height /11 * 10;
 		}
 		
 		private function onClciBackButton(event:KeyboardEvent):void
@@ -190,8 +177,7 @@ package Screen
 			if(event.keyCode == Keyboard.BACK)
 			{
 				event.preventDefault();
-				_dialogExtension.showAlertDialog("종료?");
-				trace("aa");
+				_dialogExtension.showAlertDialog("종료 하시겠습니까?");
 			}
 		}
 		
@@ -213,30 +199,27 @@ package Screen
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
-		//	toastExtension.toast("삭제");
-		//	_imagePickerExtension.displayImagePicker(onImagePicked);
 		}
 		
-		/*
-		private function onImagePicked(event:String, pickedImageBitmapData:BitmapData, pickedImageByteArray:ByteArray):void
-		{
-			trace("드러왔당!!");
-			trace(pickedImageBitmapData.width);
-		}
-		*/
 		
+		/**
+		 *Display가 클릭되면 호출되는 함수입니다.
+		 * Display가 이미지모드라면 클릭되있는 동안 이미지는 고정크기로 전환됩니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onClickDispaly(event:TouchEvent):void
 		{
 			if(_display.mode == RadioKeyValue.IMAGE)
 			{
 				if(event.getTouch(_display, TouchPhase.BEGAN) != null)
 				{
-					_display.expansionImage();
+					_display.changeImageStatic();
 				}
 				
 				if(event.getTouch(_display, TouchPhase.ENDED) != null)
 				{
-					_display.reduceImage();
+					_display.changeImageRelative();
 				}
 			}
 		}

@@ -6,13 +6,14 @@ package Component
 	import starling.text.TextField;
 	import starling.utils.Color;
 
-	public class MessageBox extends Sprite
+	public class MessageBox extends DisplayObjectContainer
 	{
 		private var _messageText:TextField;
 		private var _frameCounter:int;
 		private var _frameLate:int;
 		private var _x:int;
 		private var _y:int;
+		private var _content:Sprite;
 		
 		/**
 		 *사용자에게 특정 메세지를 전달해주고싶을 때 사용하게될 메세지박스 클래스입니다.
@@ -22,8 +23,10 @@ package Component
 		 */		
 		public function MessageBox()
 		{
+			_content = new Sprite();
 			_messageText = new TextField(200, 30, "");
-			addChild(_messageText);
+			_content.addChild(_messageText);
+			addChild(_content);
 			this.pivotX = this.width / 2;
 			this.pivotY = this.height / 2;
 			_messageText.format.font = "Arial";
