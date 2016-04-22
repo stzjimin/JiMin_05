@@ -329,6 +329,6 @@
 <extensions>
         <extensionID>com.lpesign.ToastExtension</extensionID>
     <extensionID>com.dialog.DialogExtension</extensionID>
-    <extensionID>com.freshplanet.AirImagePicker</extensionID>
+    
     </extensions>
 </application>

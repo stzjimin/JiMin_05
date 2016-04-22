@@ -59,10 +59,7 @@ package Screen
 		
 		private var _toastExtension:ToastExtension;
 		private var _dialogExtension:DialogExtension;
-		
 		private var _eventDispatcher:IEventDispatcher;
-		
-		private var _imagePickerExtension:ImagePickerExtension;
 		
 		/**
 		 *Main클래스는 시작할 때 리소스를 로드합니다. 
@@ -72,19 +69,15 @@ package Screen
 		{	
 			_content = new Sprite();
 			_resourceLoader = new ResourceLoader("https://raw.githubusercontent.com/stzjimin/JiMin_04/master/bin-debug/GUI_resources", completeResourceLoad);
-		//	_resourceLoader = new ResourceLoader("GUI_resources", completeResourceLoad);
 			_resourceLoader.loadResource(Resource.resources);
 			var messageBox:MessageBox = new MessageBox();
 			messageBox.showMessageBox("Resource Loading", 60, _content);
 			messageBox.x = 350;
 			messageBox.y = 270;
 			
-		//	_content.alignPivot();
 			
 			_toastExtension = new ToastExtension();
 			_dialogExtension = new DialogExtension(_eventDispatcher);
-		//	_eventDispatcher.addEventListener("customEvent", onSelectDialog);
-			_imagePickerExtension = new ImagePickerExtension();
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onClciBackButton);
 		}
 		

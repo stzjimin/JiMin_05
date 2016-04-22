@@ -2,6 +2,7 @@ package Data
 {
 	import flash.display.BitmapData;
 	import flash.display.PNGEncoderOptions;
+	import flash.events.IEventDispatcher;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -14,8 +15,12 @@ package Data
 		
 		private var _filePath:String;
 		
+		private var _dialogExtension:DialogExtension;
+		private var _eventDispatcher:IEventDispatcher;
+		
 		public function Encoder()
 		{
+			_dialogExtension = new DialogExtension(_eventDispatcher);
 		}
 		
 		/**
@@ -46,7 +51,8 @@ package Data
 		 */		
 		private function getXmlEncode(packedData:PackedData):void
 		{
-			var localXmlFile:File = File.documentsDirectory.resolvePath(_filePath + ".xml");
+			var localXmlFile:File = File.userDirectory.resolvePath(_filePath + ".xml");
+			trace(localXmlFile.nativePath);
 			trace(localXmlFile.url);
 			var fileAccess:FileStream = new FileStream();
 			
@@ -91,11 +97,13 @@ package Data
 			
 			bitmapData.encode(new Rectangle(0, 0, packedData.width, packedData.height), new PNGEncoderOptions(), byteArray);
 			
-			var localPngFile:File = File.documentsDirectory.resolvePath(_filePath + ".png");
+			var localPngFile:File = File.userDirectory.resolvePath(_filePath + ".png");
+			trace(localPngFile.nativePath);
 			var fileAccess:FileStream = new FileStream();
 			fileAccess.open(localPngFile, FileMode.WRITE);
-			fileAccess.writeBytes(byteArray, 0, byteArray.length);
+			fileAccess.writeBytes(byteArray);
 			fileAccess.close();
+			_dialogExtension.updateGallery(localPngFile.nativePath);
 		}
 	}
 }

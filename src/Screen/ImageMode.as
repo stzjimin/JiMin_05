@@ -42,8 +42,6 @@ package Screen
 		private var _eventDispatcher:IEventDispatcher;
 		private var _dialogExtension:DialogExtension;
 		
-		private var _saveFilePath:String = "SpritePackerApp/";
-		
 		/**
 		 *이미지모드와 관련된 일들을 담당하는 클래스입니다.
 		 * 이미지모드는 1개의 드롭다운바와 3개의 버튼으로 구성됩니다.
@@ -52,6 +50,8 @@ package Screen
 		 */		
 		public function ImageMode()
 		{
+			_dialogExtension = new DialogExtension(_eventDispatcher);
+			
 			_imageSelectBar = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
 			_imageSelectBar.y = 10;
 			_imageSelectBar.addEventListener(CustomizeEvent.ListChange, onChangeImage);
@@ -127,11 +127,15 @@ package Screen
 		{
 			if(_spriteSheet != null)
 			{
-				_dialogExtension = new DialogExtension(_eventDispatcher);
 				_dialogExtension.showGallery(onImagePicked);
 			}
 		}
 		
+		/**
+		 *갤러리에서 이미지가 선택되었을 때 호출되는 함수입니다. 
+		 * @param data
+		 * 
+		 */		
 		private function onImagePicked(data:String):void
 		{
 			var file:File = new File(data);
@@ -188,18 +192,13 @@ package Screen
 		{
 			if(_spriteSheet != null)
 			{
-				_dialogExtension.showInputDialog("파일이름을 정해주세요!", getFileName);
-				/*
-				var fileManager:FileIOManager = new FileIOManager();
-				fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
-				*/
+				_dialogExtension.showInputDialog("파일이름을 정해주세요!", getSpriteName);
 			}
 		}
 		
-		private function getFileName(fileName:String):void
+		private function getSpriteName(fileName:String):void
 		{
-			_saveFilePath += fileName;
-			onCompleteSaveSheet(_saveFilePath);
+			saveSheet("SpritePackerApp/SaveSpriteSheets/"+fileName);
 		}
 		
 		/**
@@ -208,7 +207,7 @@ package Screen
 		 * @param filePath
 		 * 
 		 */		
-		private function onCompleteSaveSheet(filePath:String):void
+		private function saveSheet(filePath:String):void
 		{
 			trace(filePath);
 			var packedData:PackedData = new PackedData(1024, 1024);
@@ -231,9 +230,13 @@ package Screen
 		{
 			if(_imageSelectBar.currentSelectList.text != "")
 			{
-				var fileManager:FileIOManager = new FileIOManager();
-				fileManager.saveFile("이미지 저장", onCompleteSave);
+				_dialogExtension.showInputDialog("파일이름을 정해주세요!", getImageName);
 			}
+		}
+		
+		private function getImageName(fileName:String):void
+		{
+			saveImage("SpritePackerApp/SaveImages/"+fileName);
 		}
 		
 		/**
@@ -242,7 +245,7 @@ package Screen
 		 * @param filePath
 		 * 
 		 */		
-		private function onCompleteSave(filePath:String):void
+		private function saveImage(filePath:String):void
 		{
 			var rect:Rectangle = searchImageRect(_imageSelectBar.currentSelectList.text);
 			var bitmapData:BitmapData = new BitmapData(rect.width, rect.height);
@@ -256,6 +259,7 @@ package Screen
 			fileAccess.writeBytes(byteArray, 0, byteArray.length);
 			fileAccess.close();
 			dispatchEvent(new Event(CustomizeEvent.SaveComplete));
+			_dialogExtension.updateGallery(localPngFile.nativePath);
 		}
 		
 		/**

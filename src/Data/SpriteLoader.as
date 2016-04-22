@@ -19,7 +19,6 @@ package Data
 		
 		private var _completeFunc:Function;
 		private var _failFunc:Function;
-		private var _fileManager:FileIOManager;
 		
 		private var _eventDispatcher:IEventDispatcher;
 		private var _dialogExtension:DialogExtension;
